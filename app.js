@@ -23,11 +23,12 @@ async function changeFiele () {
    await fs.writeFileSync( './JD_DailyBonus.js', content, 'utf8')
 }
 
-async function sendNotify (text,desp) {
+async function sendNotify (desp) {
   const options ={
-    uri:  `https://sc.ftqq.com/${serverJ}.send`,
-    form: { text, desp },
-    json: true,
+    url:  `https://oapi.dingtalk.com/robot/send?access_token=${serverJ}`,
+    headers: { 'Content-Type': 'application/json;charset=utf-8' },
+    json: desp,
+    //json: true,
     method: 'POST'
   }
   await rp.post(options).then(res=>{
@@ -58,7 +59,15 @@ async function start() {
     if (fs.existsSync(path)) {
       content = fs.readFileSync(path, "utf8");
     }
-    await sendNotify("京东签到-" + new Date().toLocaleDateString(), content);
+
+    data={
+          'msgtype': 'markdown',
+          'markdown': {
+             "title": "京东签到-" + new Date().toLocaleDateString(),
+             "text": content
+          }
+   }
+    await sendNotify(data);
     console.log('发送结果完毕')
   }
 }
