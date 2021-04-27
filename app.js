@@ -60,6 +60,7 @@ async function start() {
       content = fs.readFileSync(path, "utf8");
     }
 
+    console.log(content)
     data={
           'msgtype': 'markdown',
           'markdown': {
